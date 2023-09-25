@@ -8,7 +8,7 @@ export default class WebSocketConnection {
   isHost: boolean = false;
 
   constructor() {
-    this.socket = io('http://localhost:5001');
+    this.socket = io('https://coderscassone-websocket-11dcb7872744.herokuapp.com/');
     this.socket.emit(WebSocketEvent.CLIENT_JOINED);
     this.socket.on(WebSocketEvent.YOU_ARE_HOST, () => {
       this.isHost = true;
