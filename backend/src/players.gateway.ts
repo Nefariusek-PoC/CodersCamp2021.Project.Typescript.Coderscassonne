@@ -9,7 +9,7 @@ import { rooms } from './room.gateway';
 
 const playersInRooms = [];
 
-@WebSocketGateway(5001, { cors: true })
+@WebSocketGateway({ cors: true })
 export class PlayerGateway {
   @WebSocketServer() wss: Server;
   @SubscribeMessage(WebSocketEvent.CREATE_PLAYER)

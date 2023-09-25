@@ -3,7 +3,7 @@ import { SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
 import { Socket } from 'socket.io';
 import WebSocketEvent from '../constants/webSocketEvents';
 
-@WebSocketGateway(5001, { cors: true })
+@WebSocketGateway({ cors: true })
 export class TilesGateway {
   @SubscribeMessage(WebSocketEvent.SEND_TILE_PLACED)
   handleTilePlacementMessage(

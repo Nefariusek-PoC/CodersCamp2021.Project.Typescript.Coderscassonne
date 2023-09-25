@@ -11,7 +11,7 @@ import { Server, Socket } from 'socket.io';
 import { MassageHandler } from './app.messagehandler.service';
 import WebSocketEvent from './constants/webSocketEvents';
 
-@WebSocketGateway(5001, { cors: true })
+@WebSocketGateway({ cors: true })
 export class GameGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {

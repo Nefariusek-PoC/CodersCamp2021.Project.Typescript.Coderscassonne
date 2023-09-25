@@ -10,7 +10,7 @@ import { Server, Socket } from 'socket.io';
 
 export const rooms = [];
 
-@WebSocketGateway(5001, { cors: true })
+@WebSocketGateway({ cors: true })
 export class RoomGateway {
   @WebSocketServer() wss: Server;
 
