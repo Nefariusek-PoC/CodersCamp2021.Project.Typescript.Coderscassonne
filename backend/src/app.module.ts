@@ -10,15 +10,15 @@ import { TilesModule } from './tiles/tiles.module';
 import { PlayerGateway } from './players.gateway';
 import { TilesDbModule } from './tiles-db/tiles-db.module';
 
-import { MongooseModule } from '@nestjs/mongoose';
+// import { MongooseModule } from '@nestjs/mongoose';
 @Module({
   imports: [
     TilesModule,
-    TilesDbModule,
+    // TilesDbModule,
     ConfigModule.forRoot(),
-    MongooseModule.forRoot(
-      `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.rvske.mongodb.net/coderscassonne1?retryWrites=true&w=majority`,
-    ),
+    // MongooseModule.forRoot(
+    //   `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.rvske.mongodb.net/coderscassonne1?retryWrites=true&w=majority`,
+    // ),
   ],
   controllers: [AppController],
   providers: [
