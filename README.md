@@ -1,77 +1,73 @@
-# Coderscassonne
-## CodersCamp2021.Project.Typescript
+<p align="center">
+  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
+</p>
 
-Fourth project of CodersCamp2021. Scallable web applications (Typescript).
+[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
+[circleci-url]: https://circleci.com/gh/nestjs/nest
 
-## Repository structure
+  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
+    <p align="center">
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
+<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
+<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
+<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
+<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
+<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
+  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
+    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
+  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
+</p>
+  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
+  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-Repository is divided into frontend and backend part.
+## Description
 
-- Root directory contains basic configuration of prettier, vscode and husky.
-- React code and setup of client side is keept in `frontend` directory.
+[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Preparation
+## Installation
 
-1. Clone repository using `git clone {URL}` in the console.
-2. Install node modules in `root` and `frontend` directory.
+```bash
+$ npm install
+```
 
-# Frontend - React
+## Running the app
 
-- React version > 17.0.0 (https://reactjs.org/docs/getting-started.html)
-- React Router version > 6.0 (https://reactrouter.com/docs/en/v6)
-- MaterialUI version > 5.0 (https://mui.com/getting-started/usage/)
+```bash
+# development
+$ npm run start
 
-## How to run app on your local device?
+# watch mode
+$ npm run start:dev
 
-Prerequisites:
-Node.js >=16 (https://nodejs.org/en/)
+# production mode
+$ npm run start:prod
+```
 
-1. Navigate to the `frontend` directory using `cd frontend`.
-2. Start development server with: `npm run dev` in the terminal.
+## Test
 
-By default server should be running here: localhost:3000
+```bash
+# unit tests
+$ npm run test
 
-To stop local press `Ctrl+C`
+# e2e tests
+$ npm run test:e2e
 
-## npm scripts
+# test coverage
+$ npm run test:cov
+```
 
-**following scripts works in `frontend` directory**
+## Support
 
-- `npm run dev`: starts vite development server;
-- `npm run build`: builds for production;
-- `npm run start`: starts preview of production build;
-- `npm run test`: runs all tests;
-- `npm run format`: formats all source files with prettier;
+Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
-## Frontend structure
+## Stay in touch
 
-- index.jsx - entry point of React app;
-- src/views - directory with views and containers used in the app;
-- src/components - directory with components;
-- src/model - directory with frontend model (eg. classes, maps);
-- src/api - directory with code related to communication with APIs;
-- src/common - directory with shared code (eg. formatters);
-- src/constants - directory with project constants (eg. paths, labels);
-- src/sass - directory with global scss styles;
-- src/\_\_test\_\_ - directory with tests;
+- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
+- Website - [https://nestjs.com](https://nestjs.com/)
+- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-Components and Views should be placed in the sub-directory with all related files eg.:
-`src/components/SuccessMessage/SuccessMessage.jsx`
-`src/components/SuccessMessage/SuccessMessage.scss`
+## License
 
-Keep tests in the same manner but inside \_\_test\_\_ directory eg.:
-`src/__test__/api/dateFormatters.test.js`
-`src/__test__/components/Button.test.js`
-
-### Naming convention
-
-- PascalCase - components, views, classes (eg. MainPage, Medication);
-- camelCase - functions, variables, files not related to ones above (eg. changeMedicationFilter, isSelected);
-- SCREAMING_SNAKE_CASE - constants (eg. PATH_TO_SETTINGS, ACCEPT_BUTTON_LABEL);
-
-## Credits
-
-Graphics designed by:
-
-
-Photos by:
+Nest is [MIT licensed](LICENSE).
