@@ -6,15 +6,13 @@ import {
   manageProjects,
   validateTilePlacement,
 } from '../services/tilePlacementPhase.functions';
-import GameModeParser from '../components/GameModeParser';
 import { openInvalidMoveModal } from '../components/Modal/InvalidMoveModal';
 import { GamePhases } from '../components/NextPhaseButton/NextPhaseButton';
 import TileState from '../constants/tileState';
-import { JSONData } from '../mocks/mocksTiles';
 import Tile, { Rotation } from '../model/Tile';
 import rootStore, { RootStore } from './RootStore';
+import { FIRST_TILE_ID } from '../constants/gameDefaults';
 
-import { socket } from '../App';
 import WebSocketEvent from '../constants/webSocketEvents';
 import WebsocketMessageParser from '../model/websocket/WebSocketMessageParser';
 import TilePlacementMessage from '../model/websocket/TilePlacementMessage';
@@ -22,6 +20,9 @@ import { openShowScoreModal } from '../components/Modal/ShowScoreModal';
 import { evaluateProjects } from '../services/pointsPhase.functions';
 import Meeple from '../model/Meeple';
 import Project from '../model/Project';
+import { JSONData } from '../mocks/mocksTiles';
+import GameModeParser from '../components/GameModeParser';
+import MeeplePlacementMessage from '../model/websocket/MeeplePlacementMessage';
 
 class GameStore {
   turnNumber: number;
@@ -32,15 +33,21 @@ class GameStore {
   currentPhase: GamePhases;
   rootStore: RootStore;
 
-  constructor(rootStore: RootStore) {
+  constructor(rootStore: RootStore, allTiles: Tile[]) {
     this.boardState = [{ row: 0, column: 0, state: TileState.ACTIVE }];
     this.rootStore = rootStore;
     this.turnNumber = 0;
     this.currentPhase = GamePhases.TILE_PLACEMENT;
-    this.drawPile = GameModeParser(JSONData);
-    this.tileInHand = this.drawPile.shift();
+    this.drawPile = allTiles;
+    this.getAndRemoveFirstTile();
     this.recentlyPlacedTile = undefined;
     makeAutoObservable(this);
+  }
+
+  getAndRemoveFirstTile() {
+    const index = this.drawPile.findIndex((tile) => tile.id === FIRST_TILE_ID);
+    this.tileInHand = this.drawPile[index];
+    if (index !== -1) this.drawPile.splice(index, 1);
   }
 
   placeTile(row: number, column: number, fromWebsocket: boolean) {
@@ -49,7 +56,7 @@ class GameStore {
       if (validateTilePlacement(row, column)) {
         tileToChange.state = TileState.TAKEN;
         tileToChange.tile = this.tileInHand;
-        if (!fromWebsocket) {
+        if (!!rootStore.websocket && !fromWebsocket) {
           this.emitTilePlacementMessage(this.tileInHand.id, row, column, this.tileInHand.rotation);
         }
 
@@ -59,14 +66,16 @@ class GameStore {
 
         this.recentlyPlacedTile = this.tileInHand;
 
-        if (fromWebsocket) {
+        if (!!rootStore.websocket && fromWebsocket) {
           const indexOfTileInHand = this.drawPile.findIndex((tile) => tile.id === this.tileInHand?.id);
           this.drawPile.splice(indexOfTileInHand, 1);
         }
 
-        this.tileInHand = undefined;
         if (this.boardState.length > 9) {
-          !fromWebsocket && this.setNextPhase();
+          !!rootStore.websocket && !fromWebsocket && this.setNextPhase();
+          if (!rootStore.room) {
+            this.setNextPhase();
+          }
         }
       } else {
         openInvalidMoveModal();
@@ -95,10 +104,10 @@ class GameStore {
     tilePlacementMessage.column = column;
     tilePlacementMessage.rotation = rotation;
 
-    socket.emit(
-      WebSocketEvent.SEND_TILE_PLACED,
-      websocketMessageParser.parse(tilePlacementMessage, WebSocketEvent.SEND_TILE_PLACED),
-    );
+    if (!!rootStore.websocket)
+      rootStore.websocket.emitTilePlaced(
+        websocketMessageParser.parse(tilePlacementMessage, WebSocketEvent.SEND_TILE_PLACED),
+      );
   }
 
   setTileInHandFromWebSocket(id: string, rotation: Rotation) {
@@ -109,12 +118,23 @@ class GameStore {
       this.tileInHand = tileFromWebSocket;
       return;
     }
-
-    this.tileInHand = undefined;
   }
 
   setRotationFromWebSocket(rotation: Rotation) {
     this.tileInHand?.setRotation(rotation);
+  }
+
+  emitMeeplePlacementMessage(id: string, row: number, column: number) {
+    const websocketMessageParser = new WebsocketMessageParser();
+    const meeplePlacementMessage = new MeeplePlacementMessage('');
+    meeplePlacementMessage.id = id;
+    meeplePlacementMessage.row = row;
+    meeplePlacementMessage.column = column;
+
+    if (!!rootStore.websocket)
+      rootStore.websocket.emitMeeplPlaced(
+        websocketMessageParser.parse(meeplePlacementMessage, WebSocketEvent.SEND_MEEPLE_PLACED),
+      );
   }
 
   setNextPhase(fromWebsocket: boolean = false) {
@@ -127,7 +147,7 @@ class GameStore {
       this.endCurrentTurn();
       this.currentPhase = GamePhases.TILE_PLACEMENT;
     }
-    !fromWebsocket && socket.emit(WebSocketEvent.SEND_NEXT_PHASE, true);
+    if (!!rootStore.websocket && !fromWebsocket) rootStore.websocket.emitNextPhase(true);
   }
 
   increaseTurnNumber() {

@@ -38,6 +38,10 @@ class PlayersStore {
   initPlayersStore() {
     this.players = [];
   }
+  
+  isMyTurn() {
+    return this.getCurrentPlayer()?.name === this.rootStore.clientName;
+  }
 }
 
 export default PlayersStore;

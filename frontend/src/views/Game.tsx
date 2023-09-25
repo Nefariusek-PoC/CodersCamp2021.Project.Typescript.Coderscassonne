@@ -16,7 +16,7 @@ import { InvalidMoveModal } from '../components/Modal/InvalidMoveModal';
 import { EndTurnModal } from '../components/Modal/EndTurnModal';
 import rootStore from '../stores/RootStore';
 import { observer } from 'mobx-react';
-import NextPhaseButton from '../components/NextPhaseButton/NextPhaseButton';
+import NextPhaseButton, { GamePhases } from '../components/NextPhaseButton/NextPhaseButton';
 
 const GamePage: React.FunctionComponent = observer((): ReactElement => {
   const players = rootStore.playersStore.players;
@@ -28,7 +28,10 @@ const GamePage: React.FunctionComponent = observer((): ReactElement => {
   const drawPileLayoutProportion = `${((1 - GAMEBOARD_LAYOUT_PROPORTION * 100) / 2) * 100 - 1}%`;
 
   return (
-    <div style={{ height: '97vh' }}>
+    <div
+      className={rootStore.room && !rootStore.playersStore.isMyTurn() ? 'pointer-events-none' : ''}
+      style={{ height: '97vh' }}
+    >
       <div
         className="flex justify-between items-center z-0 border-b-2 border-DARKTHEME_LIGHT_GREEN_COLOR"
         style={{ height: playersInfoLayoutProportion, maxHeight: playersInfoLayoutProportion, minHeight: '128px' }}
@@ -51,7 +54,14 @@ const GamePage: React.FunctionComponent = observer((): ReactElement => {
       >
         {/* <ProjectList /> */}
         <MapInteractionCSS minScale={0.5} maxScale={3}>
-          <div className={`flex justify-center items-center w-screen`} style={{ height: gamebordLayoutProportion }}>
+          <div
+            className={
+              rootStore.gameStore.currentPhase != GamePhases.TILE_PLACEMENT
+                ? `flex justify-center items-center w-screen pointer-events-none`
+                : `flex justify-center items-center w-screen`
+            }
+            style={{ height: gamebordLayoutProportion }}
+          >
             <GameBoard />
           </div>
         </MapInteractionCSS>
@@ -60,7 +70,10 @@ const GamePage: React.FunctionComponent = observer((): ReactElement => {
         className="flex justify-around border-t-2 border-DARKTHEME_LIGHT_GREEN_COLOR pt-2"
         style={{ bottom: 0, height: drawPileLayoutProportion, maxHeight: drawPileLayoutProportion }}
       >
-        {<PlayersHand />}
+        {!(
+          (rootStore.room && !rootStore.playersStore.isMyTurn()) ||
+          rootStore.gameStore.currentPhase != GamePhases.TILE_PLACEMENT
+        ) && <PlayersHand />}
         <DrawPile numberOfAvailableTiles={drawPileLength} />
       </div>
       <InvalidMoveModal />

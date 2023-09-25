@@ -6,6 +6,7 @@ import { SettingsModal } from '../components/Modal/SettingsModal';
 import { useNavigate } from 'react-router-dom';
 
 import GameMode from '../model/GameMode';
+import startGameWithTilesRetrieval from '../services/startGameWithTilesRetrieval';
 
 const classicModeText = 'Take your time! Turns are long!';
 // IN PROGRESS
@@ -28,14 +29,18 @@ const GameModeContainer = (props: GameModeContainerProps) => {
   const handleMouseOut = () => {
     setIsHovering(false);
   };
-  const handlePlayGameButtonClick = () => {
+  const handlePlayGameButtonClick = async () => {
     if (gameMode === 'Classic') {
       const mode = new GameMode(60, 128, 64, 64, gameMode);
       localStorage.setItem('Game mode', JSON.stringify(mode));
+
+      await startGameWithTilesRetrieval();
       navigate(PATH_TO_GAMEPAGE);
     } else if (gameMode === 'Fast') {
       const mode = new GameMode(10, 32, 4, 4, gameMode);
       localStorage.setItem('Game mode', JSON.stringify(mode));
+
+      await startGameWithTilesRetrieval();
       navigate(PATH_TO_GAMEPAGE);
     } else {
       navigate(PATH_TO_CUSTOM_MODE_FORM);
